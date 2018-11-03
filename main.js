@@ -2,11 +2,12 @@
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 ctx.fillStyle = 'rgb(0, 0, 0)';
+var rects = [];
+var dim = 75;
 
 function displayFrame(inputx, inputy, inputname) {
 	var centerx = inputx;
 	var centery = inputy;
-	var dim = 75;
 	var x = centerx - dim/2;
 	var y = centery - dim/2;
 	var attr_dimx = dim/2;
@@ -25,12 +26,13 @@ function displayFrame(inputx, inputy, inputname) {
 
 function makeFrame(inputObj) {
 	displayFrame(inputObj.x, inputObj.y, inputObj.name);
+	rects.push({ x: inputObj.x, y: inputObj.y, d: dim, id:inputObj.id});
 }
 
 var room = { p1:{ x:5, y:5 },
 		     p2:{ x:300, y:5 },
-			 p3:{x:300, y:250},
-			 p4:{x:600, y:250},
+			 p3:{ x:300, y:250},
+			 p4:{ x:600, y:250},
 	  		 p5:{ x:600, y:500},
 			 p6:{ x:5, y:500}
 		   };
@@ -43,13 +45,11 @@ function makeRoom(inRoom) {
 		ctx.beginPath();
 		if (inRoom.hasOwnProperty(key)) {
 			var prop = inRoom[key];
-			console.log(prop);
 			if (first) {
 				p1 = prop;
 				pprev = prop; 
 				first = false;
 			} else {
-				console.log("hello");
 				ctx.moveTo(pprev.x, pprev.y);
 				ctx.lineTo(prop.x, prop.y);
 				ctx.stroke();
@@ -63,5 +63,21 @@ function makeRoom(inRoom) {
 }
 makeRoom(room);
 
-var myObj = { x:150, y:100, name:"desk" }; 
+var myObj = { x:100, y:50, name:"desk", id:1 }; 
 makeFrame(myObj);
+
+c.onmousemove = function(e) {
+	var rect = this.getBoundingClientRect(),
+		x = e.clientX - rect.left,
+		y = e.clientY - rect.top,
+		i = 0, r;
+
+	while (r = rects[i++]) {
+		ctx.beginPath();
+		ctx.rect(r.x - r.d/2, r.y - r.d/2, r.d, r.d);
+
+		if (ctx.isPointInPath(x, y)) {
+			console.log("on rect " + i.toString());
+		}
+	}
+}
