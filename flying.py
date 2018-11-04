@@ -38,7 +38,7 @@ class Flying(object):
 		self.takeoff()
 		sleep(5)
 		self.turn_right(10)
-		sleep(5)
+		sleep(20)
 		self.land()
 		sleep(5)
 		self.drone_conn.quit()

@@ -12,5 +12,6 @@ if __name__ == '__main__':
 	gv = GetVideo(dc)
 	fl = Flying(dc)
 	gv.frame_collect_async()
-	gv.display_cont_async()
+	gv.frame_save_async()
+	# gv.display_cont_async()
 	fl.fly()

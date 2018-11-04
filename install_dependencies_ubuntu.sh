@@ -13,3 +13,9 @@
 python -m pip install opencv-python
 python -m pip install image
 python -m pip install tellopy
+
+python -m pip install imutils
+
+python -m pip install scipy
+
+python -m pip install awscli
