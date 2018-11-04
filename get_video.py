@@ -20,6 +20,11 @@ class GetVideo(object):
 		self.current_frame = np.array([[[0,0,0]]])
 		self.drone_conn = drone_conn
 		self.drone = self.drone_conn.get_drone_connection()
+		self.file_start_id = 0
+		file_patt = self.get_file_pattern()
+		while os.path.exists(file_patt.format(start_id=self.file_start_id, id=0)):
+			self.file_start_id = self.file_start_id + 1
+		self.file_start_id = start_id
 
 	def frame_collect(self):
 		try:
@@ -67,11 +72,12 @@ class GetVideo(object):
 	def display_cont_async(self):
 		threading.Thread(target=self.display_cont).start()
 	
+	def get_file_pattern(self):
+		return 'snaps/snap_{start_id}_{id}.png'
+	
 	def frame_save(self):
-		start_id = 0
-		file_patt = 'snaps/snap_{start_id}_{id}.png'
-		while os.path.exists(file_patt.format(start_id=start_id, id=0)):
-			start_id = start_id + 1
+		start_id = self.file_start_id
+		file_patt = self.get_file_pattern()
 		ident = 0
 		latest_fname = file_patt.format(start_id=start_id, id='current')
 		while self.collecting:
