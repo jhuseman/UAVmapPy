@@ -24,7 +24,6 @@ class GetVideo(object):
 		file_patt = self.get_file_pattern()
 		while os.path.exists(file_patt.format(start_id=self.file_start_id, id=0)):
 			self.file_start_id = self.file_start_id + 1
-		self.file_start_id = start_id
 
 	def frame_collect(self):
 		try:
